@@ -1,0 +1,38 @@
+import { useState } from "react";
+import Button from "./Button";
+import { ToastContainer, toast } from "react-toastify";
+
+export default function AddTodoForm({ todos, setTodos }) {
+
+  const [todoText, setTodoText] = useState('');
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (todoText.trim() !== '') {
+      setTodos([...todos, { id: todos.length + 1, text: todoText, completed: false }]);
+      setTodoText('');
+      toast.success('Todo added successfully');
+    } else {
+      toast.error('Please enter a valid todo.');
+    }
+  };
+
+  return (
+    <form 
+      onSubmit={handleFormSubmit}
+    >
+        <h2 className="font-medium text-[#231d15] font-semibold">Add a todo</h2>
+        <input 
+          type="text" 
+          className="h-[45px] border border-black/[12%] rounded-[5px] my-[9px] text-[14px] block w-full px-[10px]"
+          value={todoText}
+          onChange={(e) => {
+            setTodoText(e.target.value)
+          }}
+        />
+        
+        <Button buttonType="">Add todo</Button>
+    </form>
+
+  )
+}
