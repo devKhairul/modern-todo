@@ -8,12 +8,16 @@ export default function AddTodoForm({ todos, setTodos }) {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (todoText.trim() !== "") {
-      setTodos([
-        ...todos,
-        { id: todos.length + 1, text: todoText, completed: false },
-      ]);
-      setTodoText("");
-      toast.success("Todo added successfully");
+      if (todos.length >= 3) {
+        toast.error("Maximum 3 todos reached.");
+      } else {
+        setTodos([
+          ...todos,
+          { id: todos.length + 1, text: todoText, completed: false },
+        ]);
+        setTodoText("");
+        toast.success("Todo added successfully");
+      }
     } else {
       toast.error("Please enter a valid todo.");
     }
