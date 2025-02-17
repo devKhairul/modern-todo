@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
+import { Todo } from "../types/todo";
 
-export default function DeleteButton({ id, setTodos }) {
+export default function DeleteButton({ id, setTodos } : {id: number, setTodos: React.Dispatch<React.SetStateAction<Todo[]>>}) {
 
   const handleDelete = () => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
