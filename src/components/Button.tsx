@@ -1,8 +1,5 @@
+import { ButtonProps } from "../types/button"
 
-type ButtonProps = {
-    buttonType: String,
-    children: String,
-}
 
 export default function Button({buttonType, children} : ButtonProps) {
 

@@ -1,10 +1,7 @@
 import DeleteButton from "./DeleteButton";
 
-interface Todo {
-  id: number;
-  text: string;
-  isCompleted: boolean;
-}
+import { Todo } from "../types/todo";
+
 
 export default function TodoList({
   todos,

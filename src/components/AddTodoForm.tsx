@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Button from "./Button";
 import { toast } from "react-toastify";
+import { Todo } from "../types/todo";
 
-export default function AddTodoForm({ todos, setTodos }) {
+export default function AddTodoForm({ todos, setTodos } : { todos: Todo[]; setTodos: React.Dispatch<React.SetStateAction<Todo[]>> }) {
   const [todoText, setTodoText] = useState("");
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e : React.FormEvent) => {
     e.preventDefault();
     if (todoText.trim() !== "") {
       if (todos.length >= 3) {
@@ -13,7 +14,7 @@ export default function AddTodoForm({ todos, setTodos }) {
       } else {
         setTodos([
           ...todos,
-          { id: todos.length + 1, text: todoText, completed: false },
+          { id: todos.length + 1, text: todoText, isCompleted: false },
         ]);
         setTodoText("");
         toast.success("Todo added successfully");
