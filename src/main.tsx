@@ -12,8 +12,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <KindeProvider
       clientId="f5e56e1cfd9748d7ad06f23cd35b5573"
       domain="https://methodical.kinde.com"
-      redirectUri={process.env.NODE_ENV === "production" ? "http://localhost:5173" : "http://localhost:5173"}
-      logoutUri={process.env.NODE_ENV === "production" ? "http://localhost:5173" : "http://localhost:5173"}
+      redirectUri={process.env.NODE_ENV === "production" ? "https://modern-todo-omega.vercel.app/" : "http://localhost:5173"}
+      logoutUri={process.env.NODE_ENV === "production" ? "https://modern-todo-omega.vercel.app/" : "http://localhost:5173"}
       isDangerouslyUseLocalStorage={true}
       >
       
