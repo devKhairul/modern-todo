@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 import { TodoProps } from "../types/todo";
 import { TodoContextType } from "../types/TodoContextType";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 
 
 export const TodoContext = createContext<TodoContextType | null>(null);
@@ -16,10 +17,17 @@ const TodosContextProvider = ({children} : {children: React.ReactNode}) => {
   
   const [todos, setTodos] = useState<TodoProps[]>(getInitialTodos());
 
+  const { isAuthenticated } = useKindeAuth();
+
   
   const handleFormSubmit = (e : React.FormEvent, todoText: string, setTodoText: React.Dispatch<React.SetStateAction<string>>) => {
     e.preventDefault();
 
+    if (!isAuthenticated && todos.length >= 3) {
+        toast.error("You have reached the maximum number of todos. Please register to add more.");
+        return;
+    }
+    
     if (todoText.trim() !== "") {
       setTodos([
         ...todos,
