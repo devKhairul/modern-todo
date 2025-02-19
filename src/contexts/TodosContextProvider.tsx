@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import { TodoProps } from "../types/todo";
@@ -7,10 +7,37 @@ import { TodoContextType } from "../types/TodoContextType";
 
 export const TodoContext = createContext<TodoContextType | null>(null);
 
+const getInitialTodos = () => {
+  const storedTodos = localStorage.getItem("todos");
+  return storedTodos ? JSON.parse(storedTodos) : [];
+};
+
 const TodosContextProvider = ({children} : {children: React.ReactNode}) => {
+  
+  const [todos, setTodos] = useState<TodoProps[]>(getInitialTodos());
 
-  const [todos, setTodos] = useState<TodoProps[]>([]);
+  
+  const handleFormSubmit = (e : React.FormEvent, todoText: string, setTodoText: React.Dispatch<React.SetStateAction<string>>) => {
+    e.preventDefault();
 
+    if (todoText.trim() !== "") {
+      setTodos([
+        ...todos,
+        { id: todos.length + 1, text: todoText, isCompleted: false },
+      ]);
+      setTodoText("");
+      toast.success("Todo added successfully");
+    } else {
+      toast.error("Please enter a valid todo.");
+    }
+  };
+
+  // save todos to local storage
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
+  
   const handleTodoToggle = (todo: TodoProps) => {
     const updatedTodos = todos.map((t) =>
       t.id === todo.id ? { ...t, isCompleted: !t.isCompleted } : t
@@ -30,20 +57,6 @@ const TodosContextProvider = ({children} : {children: React.ReactNode}) => {
       });
   };
 
-  const handleFormSubmit = (e : React.FormEvent, todoText: string, setTodoText: React.Dispatch<React.SetStateAction<string>>) => {
-    e.preventDefault();
-
-    if (todoText.trim() !== "") {
-      setTodos([
-        ...todos,
-        { id: todos.length + 1, text: todoText, isCompleted: false },
-      ]);
-      setTodoText("");
-      toast.success("Todo added successfully");
-    } else {
-      toast.error("Please enter a valid todo.");
-    }
-  };
 
   return (
     <TodoContext.Provider value={{ todos, setTodos, handleTodoToggle, handleDelete, handleFormSubmit }}>
