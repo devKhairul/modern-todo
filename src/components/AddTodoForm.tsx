@@ -1,28 +1,23 @@
-import { useState } from "react";
+import { useState, useContext, useCallback } from "react";
 import Button from "./Button";
-import { toast } from "react-toastify";
-import { TodoProps } from "../types/todo";
+
+import { TodoContext } from "../contexts/TodosContextProvider";
 
 
-export default function AddTodoForm({ todos, setTodos } : {todos: TodoProps[], setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>>}) {
+export default function AddTodoForm() {
   const [todoText, setTodoText] = useState("");
 
-  const handleFormSubmit = (e : React.FormEvent) => {
-    e.preventDefault();
-    if (todoText.trim() !== "") {
-      setTodos([
-        ...todos,
-        { id: todos.length + 1, text: todoText, isCompleted: false },
-      ]);
-      setTodoText("");
-      toast.success("Todo added successfully");
-    } else {
-      toast.error("Please enter a valid todo.");
-    }
-  };
+  const context = useContext(TodoContext);
+  if (!context) {
+    throw new Error('TodoContext is not provided');
+  }
+
+  const { handleFormSubmit } = context;
+
+  const handleSubmit = useCallback((e : React.FormEvent) => handleFormSubmit(e, todoText, setTodoText), [handleFormSubmit, todoText, setTodoText]);
 
   return (
-    <form onSubmit={handleFormSubmit}>
+    <form onSubmit={handleSubmit}>
       <h2 className="text-[#231d15] font-semibold">Add a todo</h2>
       <input
         type="text"

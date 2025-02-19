@@ -1,25 +1,22 @@
-import { toast } from "react-toastify";
-import { Todo } from "../types/todo";
+import { useContext } from "react";
+import { TodoContext } from "../contexts/TodosContextProvider";
+import { TodoProps } from "../types/todo";
 
-export default function DeleteButton({ id, setTodos } : {id: number, setTodos: React.Dispatch<React.SetStateAction<Todo[]>>}) {
+export default function DeleteButton({ id, setTodos } : { id: number, setTodos: React.Dispatch<React.SetStateAction<TodoProps[]>> }) {
 
-  const handleDelete = () => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
-    toast.warn('Todo deleted!', {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      progress: undefined,
-      theme: "light",
-      });
-  };
+  const context = useContext(TodoContext);
+  
+  if (!context) {
+    throw new Error('TodoContext is not provided');
+  }
+
+  const { handleDelete } = context;
 
   return (
     <button
       onClick={(e) => {
         e.stopPropagation();
-        handleDelete();
+        handleDelete(id, setTodos);
       }}
     >
       ❌

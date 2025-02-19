@@ -1,20 +1,19 @@
+import { useContext } from "react";
+
+import { TodoContext } from "../contexts/TodosContextProvider";
 import DeleteButton from "./DeleteButton";
-import { Todo } from "../types/todo";
 
-export default function TodoList({
-  todos,
-  setTodos,
-}: {
-  todos: Todo[];
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-}) {
-  const handleClick = (todo: Todo) => {
-    const updatedTodos = todos.map((t) =>
-      t.id === todo.id ? { ...t, isCompleted: !t.isCompleted } : t
-    );
-    setTodos(updatedTodos);
-  };
 
+export default function TodoList() {
+  
+  const context = useContext(TodoContext);
+  
+  if (!context) {
+    throw new Error('TodoContext is not provided');
+  }
+
+  const { todos, setTodos, handleTodoToggle } = context;
+  
   return (
     <ul>
       {todos.length === 0 && (
@@ -28,7 +27,7 @@ export default function TodoList({
           key={todo.id}
           className="flex justify-between items-center px-8 h-[50px] text-[14px] cursor-pointer border-b border-black/[8%] hover:bg-[#efefef6d]"
           onClick={() => {
-            handleClick(todo);
+            handleTodoToggle(todo);
           }}
         >
           <span className={todo.isCompleted ? "line-through text-[#ccc]" : ""}>
